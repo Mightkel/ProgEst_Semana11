@@ -37,3 +37,60 @@ print(buscar(raiz, 60))
 inorden(raiz)
 
 #Paso C
+
+def preorden(raiz):
+    if raiz is not None:
+        print(raiz["valor"], end=" ")
+        preorden(raiz["izq"])
+        preorden(raiz["der"])
+
+def postorden(raiz):
+    if raiz is not None:
+        postorden(raiz["izq"])
+        postorden(raiz["der"])
+        print(raiz["valor"], end=" ")
+
+def contar_nodos(raiz):
+    if raiz is None:
+        return 0
+    return 1 + contar_nodos(raiz["izq"]) + contar_nodos(raiz["der"])
+
+def altura(raiz):
+    if raiz is None:
+        return 0
+    return 1 + max(altura(raiz["izq"]), altura(raiz["der"]))
+
+# Reto: eliminación
+
+def minimo(raiz):
+    while raiz["izq"] is not None:
+        raiz = raiz["izq"]
+    return raiz
+
+def eliminar(raiz, valor):
+    if raiz is None:
+        return None
+    if valor < raiz["valor"]:
+        raiz["izq"] = eliminar(raiz["izq"], valor)
+    elif valor > raiz["valor"]:
+        raiz["der"] = eliminar(raiz["der"], valor)
+    else:
+        if raiz["izq"] is None:
+            return raiz["der"]
+        if raiz["der"] is None:
+            return raiz["izq"]
+        sucesor = minimo(raiz["der"])
+        raiz["valor"] = sucesor["valor"]
+        raiz["der"] = eliminar(raiz["der"], sucesor["valor"])
+    return raiz
+
+print()
+preorden(raiz); print()
+postorden(raiz); print()
+print(contar_nodos(raiz))
+print(altura(raiz))
+
+raiz = eliminar(raiz, 20)
+raiz = eliminar(raiz, 30)
+raiz = eliminar(raiz, 50)
+inorden(raiz)
